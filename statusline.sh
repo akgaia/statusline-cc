@@ -82,9 +82,13 @@ IN_FMT=$(fmt_tok "$IN_TOK")
 OUT_FMT=$(fmt_tok "$OUT_TOK")
 CACHE_FMT=$(fmt_tok "$CACHE_TOK")
 
-# --- New session at (local time of 5h window reset) ---
+# --- 5h window reset time (local); folded into the 5h field below ---
+# %p (AM/PM) works on both GNU (date -d @epoch) and BSD/macOS (date -r epoch).
+# %P is GNU-only and prints a bogus constant "P" on macOS, so don't use it.
 if [ "$RESET_AT" -gt 0 ]; then
-    RESET_TIME=$(date -d "@$RESET_AT" "+%-I:%M%P" 2>/dev/null || date -r "$RESET_AT" "+%-I:%M%P" 2>/dev/null)
+    RESET_TIME=$(date -d "@$RESET_AT" "+%-I:%M%p" 2>/dev/null || date -r "$RESET_AT" "+%-I:%M%p" 2>/dev/null)
+    # Normalize "8:06AM" -> "8:06a" (lowercase, drop the trailing m)
+    RESET_TIME=$(echo "$RESET_TIME" | tr '[:upper:]' '[:lower:]' | sed 's/m$//')
 else
     RESET_TIME=""
 fi
@@ -122,6 +126,8 @@ LIMIT_7D=""
 if [ -n "$FIVE_H" ]; then
     RL5_C=$(thresh_color_important "$FIVE_H" 60 80)
     LIMIT_5H="${RL5_C}5h:${FIVE_H}%${RST}"
+    # Fold the window reset time into the 5h field, dim, in parens
+    [ -n "$RESET_TIME" ] && LIMIT_5H="${LIMIT_5H} ${DIM}(${RESET_TIME})${RST}"
 fi
 if [ -n "$SEVEN_D" ]; then
     RL7_C=$(thresh_color "$SEVEN_D" 60 80)
@@ -144,6 +150,5 @@ OUT="${OUT:+$OUT$SEP}${CTX_COLOR}ctx:${CTX_PCT}%${RST}"
 OUT="${OUT}${SEP}${DIM}↓${IN_FMT}${RST}"
 OUT="${OUT}${SEP}${DIM}↑${OUT_FMT}${RST}"
 OUT="${OUT}${SEP}${DIM}cache:${CACHE_FMT}${RST}"
-[ -n "$RESET_TIME" ] && OUT="${OUT}${SEP}${DIM}New ${RESET_TIME}${RST}"
 
 echo -e "$OUT"

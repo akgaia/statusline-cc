@@ -1,0 +1,3 @@
+# Shell scripts must use LF endings even on Windows checkouts, or the
+# `#!/bin/bash` shebang breaks ("bad interpreter") under Git Bash / WSL.
+*.sh text eol=lf
