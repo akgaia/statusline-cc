@@ -4,7 +4,7 @@ A clean, single-line status line for [Claude Code](https://claude.com/claude-cod
 **Calm by default — color only shows up when something needs your attention.**
 
 ```
-statusline-cc │ main ~2 │ Opus 4.8 │ 5h:12% │ 7d:8% │ ctx:34% │ ↓45k │ ↑12k │ cache:230k │ New 3:45pm
+statusline-cc │ main ~2 │ Opus 4.8 xhigh │ 5h:12% │ 7d:8% │ ctx:34% │ ↓45k │ ↑12k │ cache:230k │ New 3:45pm
 ```
 
 It shows, left to right:
@@ -13,7 +13,7 @@ It shows, left to right:
 | ------------ | ----------------------------------------------------------------------- |
 | `folder`     | Current project folder                                                  |
 | `main ~2`    | Git branch, with `+N` staged and `~N` modified file counts              |
-| `Opus 4.8`   | Active model (the `Claude` prefix and context suffix are stripped)      |
+| `Opus 4.8 xhigh` | Active model (the `Claude` prefix and context suffix are stripped), followed by the reasoning effort (`low`/`medium`/`high`/`xhigh`/`max`) when the model supports it |
 | `5h:12%`     | Percentage of the 5-hour rate-limit window used                         |
 | `7d:8%`      | Percentage of the 7-day rate-limit window used                          |
 | `ctx:34%`    | Context window used — the anchor field, bold green/yellow/red           |

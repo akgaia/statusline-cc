@@ -32,6 +32,8 @@ const model=g('model.display_name','');
 // e.g. 'Claude Opus 4.7 (1M context)' -> 'Opus 4.7'
 const shortModel=model.replace(/^Claude\s+/i,'').replace(/\s*\(.*\)\s*$/,'').trim();
 console.log('MODEL_NAME='+q(shortModel));
+// Reasoning effort (low|medium|high|xhigh|max); absent for models without effort
+console.log('EFFORT='+q(g('effort.level','')));
 // Project folder: last component of current_dir or cwd
 const cwd=g('workspace.current_dir','')||g('cwd','');
 const folder=cwd.split(/[\\\\/]/).filter(Boolean).pop()||'';
@@ -131,7 +133,11 @@ SEP=" ${DIM}│${RST} "
 OUT=""
 [ -n "$PROJ_FOLDER" ] && OUT="${DIM}${PROJ_FOLDER}${RST}"
 [ -n "$GIT_INFO" ]   && OUT="${OUT:+$OUT$SEP}${GIT_INFO}"
-[ -n "$MODEL_NAME" ] && OUT="${OUT:+$OUT$SEP}${DIM}${MODEL_NAME}${RST}"
+if [ -n "$MODEL_NAME" ]; then
+    MODEL_DISP="$MODEL_NAME"
+    [ -n "$EFFORT" ] && MODEL_DISP="$MODEL_NAME $EFFORT"
+    OUT="${OUT:+$OUT$SEP}${DIM}${MODEL_DISP}${RST}"
+fi
 [ -n "$LIMIT_5H" ]   && OUT="${OUT:+$OUT$SEP}${LIMIT_5H}"
 [ -n "$LIMIT_7D" ]   && OUT="${OUT:+$OUT$SEP}${LIMIT_7D}"
 OUT="${OUT:+$OUT$SEP}${CTX_COLOR}ctx:${CTX_PCT}%${RST}"
