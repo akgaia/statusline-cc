@@ -17,9 +17,12 @@ const q = s => \"'\" + String(s).replace(/'/g,\"'\\\\''\")+\"'\";
 // used_percentage is null until first API call; default to 0 until then
 const usedPct = g('context_window.used_percentage', null);
 console.log('CTX_PCT='+(usedPct !== null ? Math.floor(usedPct) : 0));
-// Session-cumulative token totals
-console.log('IN_TOK='+g('context_window.total_input_tokens',0));
-console.log('OUT_TOK='+g('context_window.total_output_tokens',0));
+// Current-turn token usage, as three DISJOINT components (not cumulative).
+// context_window.total_input_tokens bundles input+cache_creation+cache_read,
+// so it overlaps cache and just mirrors ctx%. Read the raw current_usage
+// fields instead: ↓ new (uncached) input, ↑ output, cache: served from cache.
+console.log('IN_TOK='+g('context_window.current_usage.input_tokens',0));
+console.log('OUT_TOK='+g('context_window.current_usage.output_tokens',0));
 console.log('CACHE_TOK='+g('context_window.current_usage.cache_read_input_tokens',0));
 console.log('DURATION_MS='+g('cost.total_duration_ms',0));
 console.log('RESET_AT='+g('rate_limits.five_hour.resets_at',0));

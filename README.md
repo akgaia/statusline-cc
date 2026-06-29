@@ -4,7 +4,7 @@ A clean, single-line status line for [Claude Code](https://claude.com/claude-cod
 **Calm by default — color only shows up when something needs your attention.**
 
 ```
-statusline-cc │ main ~2 │ Opus 4.8 xhigh │ 5h:12% (3:45p) │ 7d:8% │ ctx:34% │ ↓45k │ ↑12k │ cache:230k
+statusline-cc │ main ~2 │ Opus 4.8 xhigh │ 5h:12% (3:45p) │ 7d:8% │ ctx:34% │ ↓8k │ ↑1k │ cache:64k
 ```
 
 It shows, left to right:
@@ -17,9 +17,9 @@ It shows, left to right:
 | `5h:12% (3:45p)` | Percentage of the 5-hour rate-limit window used, with the local time the window resets in parens |
 | `7d:8%`      | Percentage of the 7-day rate-limit window used                          |
 | `ctx:34%`    | Context window used — the anchor field, bold green/yellow/red           |
-| `↓45k`       | Session-cumulative input tokens                                         |
-| `↑12k`       | Session-cumulative output tokens                                        |
-| `cache:230k` | Cache-read input tokens                                                 |
+| `↓8k`        | New (uncached) input tokens in the current turn                         |
+| `↑1k`        | Output tokens generated in the current turn                             |
+| `cache:64k`  | Input tokens served from cache in the current turn                      |
 
 ### Color = attention needed
 
